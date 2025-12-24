@@ -41,5 +41,5 @@
 *.dwo
 
 # Stuff
-./builds
-./vcpkg
+./builds/
+./vcpkg/
