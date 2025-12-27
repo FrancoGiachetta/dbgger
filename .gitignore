@@ -40,6 +40,9 @@
 # debug information files
 *.dwo
 
+# Clang
+.cache/
+
 # Stuff
 builds/
 vcpkg/
