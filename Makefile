@@ -14,5 +14,5 @@ test: clean
 	
 .PHONY: clean
 clean:
-	rm -rf ${BUILDS_ROOT}
+	rm -rf ${BUILDS_ROOT} .cache
 	rm -f compile_commands.json
