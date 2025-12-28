@@ -10,7 +10,8 @@ build: clean
 .PHONY: test
 test: clean
 	cmake -S . -B ${BUILD_DIR} --fresh -DCMAKE_TOOLCHAIN_FILE=${VCPKG_CMAKE} -DBUILD_TESTING=ON
-	cmake --build ${BUILD_DIR} 
+	cmake --build ${BUILD_DIR}
+	./builds/build/test/tests
 	
 .PHONY: fmt
 fmt:
