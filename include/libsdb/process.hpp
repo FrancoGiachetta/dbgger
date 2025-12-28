@@ -1,7 +1,7 @@
 #ifndef SDB_PROCESS_HPP
 #define SDB_PROCESS_HPP
 
-#include <chrono>
+#include <cstdint>
 #include <ctime>
 #include <filesystem>
 #include <memory>
@@ -17,6 +17,14 @@ enum class process_state
     terminated
 };
 
+struct stop_reason
+{
+    stop_reason(int wait_status);
+
+    process_state reason;
+    std::uint8_t info;
+};
+
 class process
 {
     process() = delete;
@@ -30,7 +38,7 @@ class process
     ~process();
 
     void resume();
-    // ? wait_on_signal();
+    stop_reason wait_on_signal();
 
     pid_t pid() const
     {

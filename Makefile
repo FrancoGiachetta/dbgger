@@ -12,6 +12,14 @@ test: clean
 	cmake -S . -B ${BUILD_DIR} --fresh -DCMAKE_TOOLCHAIN_FILE=${VCPKG_CMAKE} -DBUILD_TESTING=ON
 	cmake --build ${BUILD_DIR} 
 	
+.PHONY: fmt
+fmt:
+	find . \
+		\( -iname 'vcpkg' -o -iname 'builds' \) -prune \
+		-o -type f \( -iname '*.h' -o -iname '*.cpp' -o -iname '*.hpp' \) -print \
+		| clang-format --style=Microsoft -i --files=/dev/stdin
+		
+
 .PHONY: clean
 clean:
 	rm -rf ${BUILDS_ROOT} .cache
