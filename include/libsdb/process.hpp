@@ -1,11 +1,13 @@
 #ifndef SDB_PROCESS_HPP
 #define SDB_PROCESS_HPP
 
+#include <cstddef>
 #include <cstdint>
-#include <ctime>
 #include <filesystem>
+#include <libsdb/registers.hpp>
 #include <memory>
 #include <sys/types.h>
+#include <sys/user.h>
 
 namespace sdb
 {
@@ -50,20 +52,34 @@ class process
         return state_;
     }
 
+    registers &get_registers()
+    {
+        return *registers_;
+    }
+
+    const registers &get_registers() const
+    {
+        return *registers_;
+    }
+
+    void write_user_area(std::size_t offset, std::uint64_t data);
+
+    void write_gprs(const user_regs_struct &gprs);
+    void write_fprs(const user_fpregs_struct &fprs);
+
   private:
+    process(pid_t pid, bool terminate_on_end, bool is_attached)
+        : pid_(pid), terminate_on_end_(terminate_on_end), is_attached_(is_attached), registers_(new registers(*this))
+    {
+    }
+
+    void read_all_registers();
+
     pid_t pid_ = 0;
     bool terminate_on_end_ = true;
     bool is_attached_ = true;
     process_state state_ = process_state::stopped;
-
-    process(pid_t pid, bool terminate_on_end, bool is_attached)
-        : pid_(pid), terminate_on_end_(terminate_on_end), is_attached_(is_attached)
-    {
-    }
-
-    process(pid_t pid, bool terminate_on_end) : pid_(pid), terminate_on_end_(terminate_on_end)
-    {
-    }
+    std::unique_ptr<registers> registers_;
 };
 } // namespace sdb
 

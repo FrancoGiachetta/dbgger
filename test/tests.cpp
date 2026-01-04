@@ -18,12 +18,12 @@ char get_process_status(pid_t pid)
     std::string data;
 
     std::getline(stat, data);
-    std::println("Data {}", data);
     auto index_of_last_parenthesis = data.rfind(')');
     auto index_of_status_indicator = index_of_last_parenthesis + 2;
 
     return data[index_of_status_indicator];
 }
+
 bool process_exists(pid_t pid)
 {
     auto ret = kill(pid, 0);

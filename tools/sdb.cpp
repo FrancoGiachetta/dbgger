@@ -2,6 +2,7 @@
 #include "libsdb/process.hpp"
 #include <csignal>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <iostream>
 #include <memory>
@@ -64,10 +65,10 @@ void print_stop_reason(const sdb::process &process, sdb::stop_reason reason)
         std::cout << "exited with status " << static_cast<int>(reason.info);
         break;
     case sdb::process_state::terminated:
-        std::cout << "terminated with signal " << sys_siglist[reason.info];
+        std::cout << "terminated with signal " << sigabbrev_np(reason.info);
         break;
     case sdb::process_state::stopped:
-        std::cout << "stopped with signal " << sys_siglist[reason.info];
+        std::cout << "stopped with signal " << sigabbrev_np(reason.info);
         break;
     default:
         break;
