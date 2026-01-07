@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <libsdb/registers.hpp>
 #include <memory>
+#include <optional>
 #include <sys/types.h>
 #include <sys/user.h>
 
@@ -34,7 +35,8 @@ class process
     process &operator=(const process &) = delete;
 
   public:
-    static std::unique_ptr<process> launch(std::filesystem::path path, bool debug = true);
+    static std::unique_ptr<process> launch(std::filesystem::path path, bool debug = true,
+                                           std::optional<int> stdout_replacement = std::nullopt);
     static std::unique_ptr<process> attach(pid_t pid);
 
     ~process();

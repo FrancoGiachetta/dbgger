@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.2.1)
 
-project("sdb" LANGUAGES CXX)
+project("sdb" LANGUAGES CXX ASM)
 
 # Configure clangd
 

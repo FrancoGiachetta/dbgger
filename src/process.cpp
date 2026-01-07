@@ -8,6 +8,7 @@
 #include <cstring>
 #include <libsdb/process.hpp>
 #include <memory>
+#include <optional>
 #include <string>
 #include <sys/ptrace.h>
 #include <sys/types.h>
@@ -26,7 +27,8 @@ void exit_with_errno(sdb::pipe &channel, std::string const &prefix)
 }
 } // namespace
 
-std::unique_ptr<sdb::process> sdb::process::launch(std::filesystem::path path, bool debug)
+std::unique_ptr<sdb::process> sdb::process::launch(std::filesystem::path path, bool debug,
+                                                   std::optional<int> stdout_replacement)
 {
     pid_t pid;
     pipe channel(true);
@@ -39,7 +41,14 @@ std::unique_ptr<sdb::process> sdb::process::launch(std::filesystem::path path, b
     if (pid == 0)
     {
         channel.close_read();
-
+        if (stdout_replacement)
+        {
+            // This closes stdout file descriptor and duplicates the first one
+            // to the second. This means that anything that goes to stdout now
+            // goes to stdout_replacement.
+            if (dup2(*stdout_replacement, STDOUT_FILENO) < 0)
+                exit_with_errno(channel, "stdout replacement failed");
+        }
         // Inside child process.
 #if defined(__APPLE__) && defined(__MACH__)
         if (debug and ptrace(PT_TRACE_ME, 0, nullptr, 0) < 0)

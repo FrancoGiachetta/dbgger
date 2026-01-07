@@ -4,9 +4,21 @@
 #include "libsdb/types.hpp"
 #include <cstddef>
 #include <cstring>
+#include <string_view>
+#include <vector>
 
 namespace sdb
 {
+inline std::string_view to_string_view(const std::byte *data, std::size_t size)
+{
+    return {reinterpret_cast<const char *>(data), size};
+}
+
+inline std::string_view to_string_view(const std::vector<std::byte> &data)
+{
+    return to_string_view(data.data(), data.size());
+}
+
 template <class To> To from_bytes(const std::byte *bytes)
 {
     To ret;
