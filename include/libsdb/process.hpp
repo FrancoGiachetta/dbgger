@@ -1,6 +1,8 @@
 #ifndef SDB_PROCESS_HPP
 #define SDB_PROCESS_HPP
 
+#include "libsdb/register_info.hpp"
+#include "libsdb/types.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
@@ -62,6 +64,11 @@ class process
     const registers &get_registers() const
     {
         return *registers_;
+    }
+
+    virt_addr get_pc() const
+    {
+        return virt_addr{get_registers().read_by_id_as<std::uint64_t>(register_id::rip)};
     }
 
     void write_user_area(std::size_t offset, std::uint64_t data);

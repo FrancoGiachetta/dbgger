@@ -88,7 +88,6 @@ DEFINE_GPR_8L(r14b, r14), DEFINE_GPR_8L(r15b, r15),
 // FPRs Macros.
 
 #define FPR_OFFSET(reg) (offsetof(user, i387) + offsetof(user_fpregs_struct, reg))
-
 #define FPR_SIZE(reg) (sizeof(user_fpregs_struct::reg))
 
 #define DEFINE_FPR(name, dwarf_id, user_name) \
@@ -120,10 +119,13 @@ DEFINE_FPR(frip, -1, rip),
 DEFINE_FPR(frdp, -1, rdp),
 DEFINE_FPR(mxcsr, 64, mxcsr),
 DEFINE_FPR(mxcsrmask, -1, mxcr_mask),
+
 DEFINE_FP_ST(0), DEFINE_FP_ST(1), DEFINE_FP_ST(2), DEFINE_FP_ST(3),
 DEFINE_FP_ST(4), DEFINE_FP_ST(5), DEFINE_FP_ST(6), DEFINE_FP_ST(7),
+
 DEFINE_FP_MM(0), DEFINE_FP_MM(1), DEFINE_FP_MM(2), DEFINE_FP_MM(3),
 DEFINE_FP_MM(4), DEFINE_FP_MM(5), DEFINE_FP_MM(6), DEFINE_FP_MM(7),
+
 DEFINE_FP_XMM(0), DEFINE_FP_XMM(1), DEFINE_FP_XMM(2), DEFINE_FP_XMM(3),
 DEFINE_FP_XMM(4), DEFINE_FP_XMM(5), DEFINE_FP_XMM(6), DEFINE_FP_XMM(7),
 DEFINE_FP_XMM(8), DEFINE_FP_XMM(9), DEFINE_FP_XMM(10), DEFINE_FP_XMM(11),

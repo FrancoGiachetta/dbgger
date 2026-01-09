@@ -5,8 +5,9 @@
 
 // Format specifiers for printf.
 
-hex_format: .asciz "%#x"
-float_format: .asciz "%.2f"
+hex_format:        .asciz "%#x"
+float_format:      .asciz "%.2f"
+long_float_format: .asciz "%.2Lf"
 
 .section .text
 
@@ -54,12 +55,31 @@ main:
 
 	trap
 	
-	# Print contents of xmm0 (sse). To do so, first move its contents into rsi.
+	# Print contents of xmm0 (sse).
 	leaq float_format(%rip), %rdi
 	movq $1, %rax
 	call printf@plt
 	movq $0, %rdi
 	call fflush@plt
+
+	trap
+
+	# Print contents of st0.
+
+	# Alloc 16 bytes on the stack. Since the stack grows downward, we do this by
+	# substracting.
+	subq $16, %rsp
+
+	fstpt (%rsp)
+	leaq long_float_format(%rip), %rdi
+	movq $0, %rax
+	call printf@plt
+	movq $0, %rdi
+	call fflush@plt
+
+	# Dealloc 16 bytes on the stack. Since the stack grows downward, we do this by
+	# substracting.
+	addq $16, %rsp
 
 	trap
 
